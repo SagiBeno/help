@@ -13,3 +13,16 @@ import { Theme } from '@radix-ui/themes';
 import { BrowserRouter } from 'react-router-dom';
 import "@radix-ui/themes/styles.css";
 ```
+
+## useLocation
+"Hívó:"
+```
+onClick={() => navigate(`/locsoltak/${locsoltSzemely.locsolt_id}`, { state: { locsoltSzemely: locsoltSzemely } })}
+```
+
+"Meghívott:"
+```
+import { useParams, useLocation } from "react-router-dom";
+const location = useLocation();
+const { locsoltSzemely } = location?.state;
+```
