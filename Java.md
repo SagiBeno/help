@@ -1,4 +1,4 @@
-# Java segédlet – Map rendezés és regexek
+# Java segédlet
 
 ## HashMap rendezése érték alapján
 
