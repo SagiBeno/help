@@ -34,7 +34,7 @@ public class LoadFromCSV {
             }
             reader.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return visits;
