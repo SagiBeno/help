@@ -14,14 +14,14 @@ export default function Attractions() {
         getVisits();
     }, [id]);
 
-    function getVisits() {
-        fetch(`http://localhost:3333/api/cities/${id}`)
-            .then(async (resJSON) => {
-                const res = await resJSON.json();
-                if (res?.data) setVisits(res.data);
-                else setVisits([]);
-            })
-            .catch(console.warn);
+    const getVisits = async () => {
+        try {
+            const resJSON = await fetch(`http://localhost:3333/api/cities/${id}`);
+            const resBody = await resJSON.json();
+            if (resBody?.data) setVisits(resBody.data);
+        } catch (error) {
+            console.warn(error);
+        }
     }
 
     return (
