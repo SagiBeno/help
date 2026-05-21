@@ -71,9 +71,7 @@ public class Main {
             }
         }
 
-        stringBuilder.append("Legtöbb szóból álló múzeumnév: ").append(longestMuseumName);
-        System.out.println(stringBuilder + "\n");
-        stringBuilder.setLength(0);
+        System.out.printf("Legtöbb szóból álló múzeumnév %s\n\n", longestMuseumName);
 
         Map<String, Long> visitByVisitNumber = visits.stream()
                 .collect(Collectors.groupingBy(
@@ -83,9 +81,7 @@ public class Main {
                 ));
 
         stringBuilder.append("Látogatások száma városonként: ");
-        visitByVisitNumber.forEach((key, value) -> {
-            stringBuilder.append(key).append(" (").append(value).append("), ");
-        });
+        visitByVisitNumber.forEach((key, value) -> stringBuilder.append(key).append(" (").append(value).append("), "));
 
         stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         System.out.println(stringBuilder + "\n");
