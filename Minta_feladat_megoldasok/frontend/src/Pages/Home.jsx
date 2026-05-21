@@ -10,25 +10,15 @@ export default function Home() {
         getCities();
     }, []);
 
-    function getCities() {
-        fetch('http://localhost:3333/api/cities')
-            .then(async (resJSON) => {
-                const res = await resJSON.json();
-                const data = [];
-
-                if (res?.data) {
-                    res?.data.forEach(element => {
-                        data.push({
-                            ...element,
-                            separator: <Separator size="3" style={{ width: '100%', background: 'white' }} />
-                        });
-                    });
-                    setCities(data);
-                }
-            })
-            .catch(console.warn);
+    const getCities = async () => {
+        try {
+            const resJSON = await fetch('http://localhost:3333/api/cities');
+            const resBody = await resJSON.json();
+            if (resBody?.data) setCities(resBody.data);
+        } catch (error) {
+            console.warn(error);
+        }
     }
-
 
     return (
         <Flex className="mainContainerForHomePage">
@@ -56,7 +46,7 @@ export default function Home() {
                             }}
                         >
                             <Text style={{ textAlign: 'left', color: 'white', fontWeight: 'bold' }} size='4'>{element.city}</Text>
-                            {element.separator}
+                            <Separator size="3" style={{ width: '100%', background: 'white' }} />
 
                             <Flex
                                 style={{
