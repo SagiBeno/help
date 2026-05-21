@@ -20,12 +20,15 @@ public class Main {
 
     public static void main(String[] args) {
         Collator collator = Collator.getInstance(new Locale("hu", "HU"));
+
+        // File beolvasás
         String filename = "exhibitions.csv";
         List<Visit> visits = LoadFromCSV.loadFromCSV(new File(filename));
         StringBuilder stringBuilder = new StringBuilder();
 
         System.out.printf("Az %s fájlból %d látogatás adata beolvasva.\n\n", filename, visits.size());
 
+        // Leghosszabb látogatás
         Visit longestVisit = visits.stream()
                 .sorted(Comparator.comparing(Visit::getVisitTime).reversed())
                 .toList()
@@ -33,6 +36,7 @@ public class Main {
 
         System.out.printf("A leghosszabb látogatás: %s - %s: %.1f óra\n\n", longestVisit.getVisitName(), longestVisit.getMuseumName(), longestVisit.getVisitTime());
 
+        // Guided tour kivlogatása
         stringBuilder.append("A guided tour típusú látogatások (időtartam szerint csökkenőben):\n");
 
         visits.stream()
@@ -43,11 +47,13 @@ public class Main {
         System.out.println(stringBuilder);
         stringBuilder.setLength(0);
 
+        // Múzeumok kigyűjtése
         List<String> museumNames = visits.stream()
                 .map(Visit::getMuseumName)
                 .distinct()
                 .toList();
 
+        // Random múzeumnév lekérdezése
         Random random = new Random();
         String randomMuseumName = museumNames.get(random.nextInt(museumNames.size()));
         stringBuilder.append("Összesen ").append(museumNames.size()).append(" múzeum található a fáljban\nKözölük egy véletlen kiválasztott: ").append(randomMuseumName).append(", látogatói:\n");
@@ -59,6 +65,7 @@ public class Main {
         System.out.println(stringBuilder);
         stringBuilder.setLength(0);
 
+        // Legtöbb szóból álló múzeumnév
         int longestMuseumNameLength = wordCounter(museumNames.getFirst());
         String longestMuseumName = museumNames.getFirst();
 
@@ -73,6 +80,7 @@ public class Main {
 
         System.out.printf("Legtöbb szóból álló múzeumnév %s\n\n", longestMuseumName);
 
+        // Város és múzeumok látogatásának száma
         Map<String, Long> visitByVisitNumber = visits.stream()
                 .collect(Collectors.groupingBy(
                         Visit::getCity,
@@ -87,6 +95,7 @@ public class Main {
         System.out.println(stringBuilder + "\n");
         stringBuilder.setLength(0);
 
+        // Fileba írás
         try {
             filename = "rovid_latogatasok.txt";
             File outputFile = new File(filename);
