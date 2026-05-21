@@ -2,6 +2,7 @@
 
 ## Parancsok
 ```
+pnpm create vite .
 pnpm install @radix-ui/themes
 pnpm i @radix-ui/react-icons
 pnpm install react-icons
