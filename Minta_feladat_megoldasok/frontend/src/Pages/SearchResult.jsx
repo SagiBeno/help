@@ -13,14 +13,14 @@ export default function SearchResult() {
         getSearchResult();
     }, [searchedWord]);
 
-    function getSearchResult() {
-        fetch(`http://localhost:3333/api/visits/search/${searchedWord}`)
-            .then(async (resJSON) => {
-                const res = await resJSON.json();
-                if (res?.data) setSearchResult(res.data);
-                else setSearchResult([]);
-            })
-            .catch(console.warn);
+    const getSearchResult = async () => {
+        try {
+            const resJSON = await fetch(`http://localhost:3333/api/visits/search/${searchedWord}`);
+            const resBody = await resJSON.json();
+            if (resBody?.data) setSearchResult(resBody.data);
+        } catch (error) {
+            console.warn(error);
+        }
     }
 
     return (
