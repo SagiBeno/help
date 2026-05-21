@@ -325,7 +325,7 @@ app.put('/api/visits/:id', (req, res) => {
 app.post('/api/types', (req, res) => {
     const name = req.body?.name;
 
-    if ( !name ) return res.status(400).json( {
+    if ( !name || typeof name != 'string' ) return res.status(400).json( {
         success: false,
         error: "Hiányzik a name mező vagy az érték nem string"
     } ); 
