@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.text.Collator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -20,55 +21,40 @@ public class Main {
     public static void main(String[] args) {
         Collator collator = Collator.getInstance(new Locale("hu", "HU"));
         String filename = "exhibitions.csv";
-        ArrayList<Visit> visits = LoadFromCSV.loadFromCSV(new File(filename));
+        List<Visit> visits = LoadFromCSV.loadFromCSV(new File(filename));
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Az ").append(filename).append(" fájlból ").append(visits.size()).append(" látogatás adata beolvasva.");
-        System.out.println(stringBuilder + "\n");
-        stringBuilder.setLength(0);
+        System.out.printf("Az %s fájlból %d látogatás adata beolvasva.\n\n", filename, visits.size());
 
-        Visit longestVisit = visits.getFirst();
+        Visit longestVisit = visits.stream()
+                .sorted(Comparator.comparing(Visit::getVisitTime).reversed())
+                .toList()
+                .getFirst();
 
-        for (Visit visit : visits) {
-            double time = visit.getVisitTime();
+        System.out.printf("A leghosszabb látogatás: %s - %s: %.1f óra\n\n", longestVisit.getVisitName(), longestVisit.getMuseumName(), longestVisit.getVisitTime());
 
-            if (longestVisit.getVisitTime() < time) longestVisit = visit;
-        }
-
-        stringBuilder.append("A leghosszabb látogatás: ").append(longestVisit.getVisitName()).append(" - ").append(longestVisit.getMuseumName()).append(": ").append(longestVisit.getVisitTime()).append(" óra");
-        System.out.println(stringBuilder + "\n");
-        stringBuilder.setLength(0);
-
-        ArrayList<Visit> guidedTours = new ArrayList<>();
-
-        for (Visit visit : visits) {
-            if (visit.getType().equalsIgnoreCase("guided tour") && !guidedTours.contains(visit)) guidedTours.add(visit);
-        }
-
-        guidedTours.sort(Comparator.comparing(Visit::getVisitTime).reversed());
         stringBuilder.append("A guided tour típusú látogatások (időtartam szerint csökkenőben):\n");
 
-        for (Visit visit : guidedTours) {
-            stringBuilder.append(visit.getVisitName()).append(" - ").append(visit.getMuseumName()).append(" (").append(visit.getVisitTime()).append(")\n");
-        }
+        visits.stream()
+                .filter(visit -> visit.getType().equalsIgnoreCase("guided tour"))
+                .sorted(Comparator.comparing(Visit::getVisitTime).reversed())
+                .forEach(visit -> stringBuilder.append(visit.getVisitName()).append(" - ").append(visit.getMuseumName()).append(" (").append(visit.getVisitTime()).append(")\n"));
 
         System.out.println(stringBuilder);
         stringBuilder.setLength(0);
 
-        ArrayList<String> museumNames = new ArrayList<>();
-        for (Visit visit : visits) {
-            String name = visit.getMuseumName();
-            if (!museumNames.contains(name)) museumNames.add(name);
-        }
+        List<String> museumNames = visits.stream()
+                .map(Visit::getMuseumName)
+                .distinct()
+                .toList();
 
         Random random = new Random();
         String randomMuseumName = museumNames.get(random.nextInt(museumNames.size()));
         stringBuilder.append("Összesen ").append(museumNames.size()).append(" múzeum található a fáljban\nKözölük egy véletlen kiválasztott: ").append(randomMuseumName).append(", látogatói:\n");
-        for (Visit visit : visits) {
-            if (visit.getMuseumName().equalsIgnoreCase(randomMuseumName)) {
-                stringBuilder.append(visit.getVisitName()).append("\n");
-            }
-        }
+
+        visits.stream()
+                .filter(visit -> visit.getMuseumName().equalsIgnoreCase(randomMuseumName))
+                .forEach(visit -> stringBuilder.append(visit.getVisitName()).append("\n"));
 
         System.out.println(stringBuilder);
         stringBuilder.setLength(0);
@@ -89,25 +75,19 @@ public class Main {
         System.out.println(stringBuilder + "\n");
         stringBuilder.setLength(0);
 
-        TreeMap<String, Integer> visitByVisitNumber = new TreeMap<>(collator);
-
-        for (Visit visit : visits) {
-            String key = visit.getCity();
-
-            if (visitByVisitNumber.containsKey(key)) {
-                int value = visitByVisitNumber.get(key) + 1;
-                visitByVisitNumber.put(key, value);
-            } else {
-                visitByVisitNumber.put(key, 1);
-            }
-        }
+        Map<String, Long> visitByVisitNumber = visits.stream()
+                .collect(Collectors.groupingBy(
+                        Visit::getCity,
+                        () -> new TreeMap<>(collator),
+                        Collectors.counting()
+                ));
 
         stringBuilder.append("Látogatások száma városonként: ");
-        for (Map.Entry<String, Integer> data : visitByVisitNumber.entrySet()) {
-            stringBuilder.append(data.getKey()).append(" (").append(data.getValue()).append("), ");
-        }
+        visitByVisitNumber.forEach((key, value) -> {
+            stringBuilder.append(key).append(" (").append(value).append("), ");
+        });
 
-        stringBuilder.deleteCharAt(stringBuilder.length() - 2);
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         System.out.println(stringBuilder + "\n");
         stringBuilder.setLength(0);
 
@@ -116,19 +96,17 @@ public class Main {
             File outputFile = new File(filename);
             FileWriter writer = new FileWriter(outputFile);
 
-            for (Visit visit : visits) {
-                if (visit.getVisitTime() < 2) {
-                    stringBuilder.append(visit.getVisitName()).append(" - ").append(visit.getMuseumName()).append(": ").append(visit.getVisitTime()).append(" óra\n");
-                }
-            }
+            visits.stream()
+                    .filter(visit -> visit.getVisitTime() < 2)
+                    .forEach(visit -> stringBuilder.append(visit.getVisitName()).append(" - ").append(visit.getMuseumName()).append(": ").append(visit.getVisitTime()).append(" óra\n"));
 
-            writer.write(String.valueOf(stringBuilder));
+            writer.write(stringBuilder.toString());
             writer.close();
-            System.out.println("A 2 óránál rövidebb látogatások adatai kiírva a " + filename + " fájlba.");
+            System.out.printf("A 2 óránál rövidebb látogatások adatai kiírva a %s fájlba.", filename);
 
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("A mentés sikertelen");
+            throw new RuntimeException(e);
         }
     }
 }
