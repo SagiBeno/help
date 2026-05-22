@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.muzeumlatogatasokgui.VisitController">
+    <children>
+        <MenuBar>
+            <menus>
+                <Menu mnemonicParsing="false" text="Fájl">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleFileOpener" text="Megnyitás">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Kilépés" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Súgó">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="Névjegy" />
+                    </items>
+                </Menu>
+            </menus>
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </MenuBar>
+        <HBox fx:id="radioButtonsContainer" alignment="CENTER" disable="true">
+            <children>
+                <RadioButton fx:id="citiesRadioButton" mnemonicParsing="false" onAction="#showCities" text="Városok">
+                    <HBox.margin>
+                        <Insets right="5.0" />
+                    </HBox.margin>
+                    <toggleGroup>
+                        <ToggleGroup fx:id="radioButtons" />
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="typesRadioButton" mnemonicParsing="false" onAction="#showTypes" text="Típusok" toggleGroup="$radioButtons" />
+            </children>
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </HBox>
+        <SplitPane dividerPositions="0.35127005347593576" VBox.vgrow="ALWAYS">
+            <items>
+                <VBox alignment="CENTER" maxWidth="200.0" minHeight="350.0" minWidth="220.0" prefWidth="200.0">
+                    <children>
+                        <ListView fx:id="dataListView" maxWidth="200.0" minHeight="300.0" minWidth="200.0" onMouseClicked="#handleShowDetails" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </ListView>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </VBox>
+                <VBox minHeight="350.0" minWidth="420.0">
+                    <children>
+                        <ListView fx:id="resultListView" minHeight="300.0" minWidth="400.0" VBox.vgrow="ALWAYS">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </ListView>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </VBox>
+            </items>
+        </SplitPane>
+    </children>
+</VBox>

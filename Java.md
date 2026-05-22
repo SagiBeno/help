@@ -39,6 +39,7 @@ Collator collator = Collator.getInstance(new Locale("hu", "HU"));
 
 lista.sort(collator);
 lista.sort((a, b) -> collator.compare(a.getNev(), b.getNev()));
+lista.sort(Comparator.comparing(Osztaly::getNev, collator))
 ```
 
 ## Regex
