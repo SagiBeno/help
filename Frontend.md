@@ -2,9 +2,12 @@
 
 ## Parancsok
 ```
+pnpm create vite .
 pnpm install @radix-ui/themes
 pnpm i @radix-ui/react-icons
 pnpm install react-icons
+pnpm i react-router
+pnpm i axios
 ```
 
 ## main.jsx
