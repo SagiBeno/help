@@ -39,12 +39,11 @@ public class VisitController {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV fájl", "*.csv"));
             File selectedFile = fileChooser.showOpenDialog(currentStage);
 
-            if (selectedFile != null) {
-                visits = LoadFromCSV.loadFromCSV(selectedFile);
-                radioButtonsContainer.setDisable(false);
-                citiesRadioButton.setSelected(true);
-                showCities();
-            }
+            if (selectedFile != null) visits = LoadFromCSV.loadFromCSV(selectedFile);
+            else visits = LoadFromCSV.loadFromCSV(new File("TODO.csv"));
+            radioButtonsContainer.setDisable(false);
+            citiesRadioButton.setSelected(true);
+            showCities();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

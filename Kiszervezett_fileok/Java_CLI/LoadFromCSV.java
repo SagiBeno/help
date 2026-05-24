@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LoadFromCSV {
-    public static ArrayList<Visit> loadFromCSV (File file) {
+    public static ArrayList<TODO> loadFromCSV (File file) {
 
-        ArrayList<Visit> visits = new ArrayList<>();
+        ArrayList<TODO> list = new ArrayList<>();
 
         try {
             Scanner reader = new Scanner(file);
@@ -13,22 +13,9 @@ public class LoadFromCSV {
 
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                String[] parts = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-
-                if (parts.length > 0) {
-
-                    for (int i = 0; i < parts.length; i++) {
-                        parts[i] = parts[i].trim().replaceAll("^\"|\"$", "");
-                    }
-
-                    String visitName = parts[0];
-                    String description = parts[1];
-                    Double visitTime = Double.parseDouble(parts[2]);
-                    String museumName = parts[3];
-                    String city = parts[4];
-                    String type = parts[5];
-
-                    visits.add(new Visit(visitName, description, visitTime, museumName, city, type));
+                
+                if (!line.isBlank) {
+                    String[] parts = line.split("; ");
                 }
 
             }
@@ -37,6 +24,6 @@ public class LoadFromCSV {
             throw new RuntimeException(e);
         }
 
-        return visits;
+        return list;
     }
 }
