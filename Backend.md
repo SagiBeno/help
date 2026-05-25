@@ -22,12 +22,12 @@ const conn = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'exhibitions'
+    database: 'TODO'
 });
 
 conn.connect((error) => {
     if (error) console.warn('Error: ', error);
-    else console.log('Succesfully connected to database: exhibitions.');
+    else console.log('Succesfully connected to database: TODO.');
 });
 
 // TODO - app.get(); ...
