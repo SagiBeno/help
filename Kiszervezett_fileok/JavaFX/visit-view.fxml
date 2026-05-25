@@ -49,7 +49,7 @@
             <items>
                 <VBox alignment="CENTER" maxWidth="200.0" minHeight="350.0" minWidth="220.0" prefWidth="200.0">
                     <children>
-                        <ListView fx:id="dataListView" maxWidth="200.0" minHeight="300.0" minWidth="200.0" onMouseClicked="#handleShowDetails" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <ListView fx:id="dataListView" maxWidth="200.0" minHeight="300.0" minWidth="200.0" onMouseClicked="#handleShowDetails" onKeyPressed="#handleShowDetails" prefWidth="200.0" VBox.vgrow="ALWAYS">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>

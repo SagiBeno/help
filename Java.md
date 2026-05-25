@@ -47,6 +47,11 @@ lista.sort(Comparator.comparing(Osztaly::getNev, collator))
 String[] parts = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 ```
 
+### Számvizsgálat (tartalmaz-e számot):
+```
+adat.matches(".*\\d.*")
+```
+
 ## Dátum
 
 ### LocalTime
